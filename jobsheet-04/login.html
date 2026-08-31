@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>SIMPUS-Mini | Login</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: "Segoe UI", Arial, sans-serif;
+                color: #2b2b2b;
+                background-color: #f5f6f8;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            main {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem 1rem;
+            }
+
+            .login-card {
+                background-color: #ffffff;
+                width: 100%;
+                max-width: 400px;
+                padding: 2.25rem 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            }
+
+            .login-header {
+                text-align: center;
+                margin-bottom: 1.75rem;
+            }
+
+            .login-header h1 {
+                color: #320042;
+                font-size: 1.75rem;
+                margin-bottom: 0.35rem;
+                font-weight: 700;
+            }
+
+            .login-header h2 {
+                color: #55677a;
+                font-size: 1.05rem;
+                font-weight: 500;
+            }
+
+            form {
+                height: auto;
+            }
+
+            .form-group {
+                margin-bottom: 1.25rem;
+            }
+
+            .form-group:nth-of-type(2) {
+                margin-bottom: 1.5rem;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 0.4rem;
+                font-weight: 600;
+                color: #444;
+                font-size: 0.95rem;
+            }
+
+            input[type="text"],
+            input[type="password"] {
+                width: 100%;
+                padding: 0.65rem 0.75rem;
+                border: 1px solid #cdd4da;
+                border-radius: 4px;
+                font-size: 1rem;
+                outline: none;
+                transition: border-color 0.2s ease;
+            }
+
+            input[type="text"]:focus,
+            input[type="password"]:focus {
+                border-color: #320042;
+            }
+
+            .btn-submit {
+                width: 100%;
+                background-color: #320042;
+                color: #ffffff;
+                border: none;
+                padding: 0.75rem;
+                border-radius: 4px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+
+            .btn-submit:hover {
+                background-color: #164869;
+            }
+
+            .login-footer {
+                text-align: center;
+                font-size: 0.9rem;
+                color: #666;
+                margin-top: 1rem;
+            }
+
+            .login-footer a {
+                color: #320042;
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+            .login-footer a:hover {
+                text-decoration: underline;
+            }
+
+            footer {
+                text-align: center;
+                padding: 1.25rem;
+                color: #7a8794;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section class="login-card">
+                <div class="login-header">
+                    <h1>SIMPUS-Mini</h1>
+                    <h2>Silahkan login untuk melanjutkan!</h2>
+                </div>
+
+                <form>
+                    <p class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Masukkan username" required />
+                    </p>
+
+                    <p class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" required />
+                    </p>
+
+                    <p>
+                        <button type="submit" class="btn-submit">Masuk</button>
+                    </p>
+
+                    <p class="login-footer">
+                        Belum punya akun? <a href="#">Daftar di sini</a>
+                    </p>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 SIMPUS-Mini &mdash; Jobsheet 4</p>
+        </footer>
+    </body>
+</html>
