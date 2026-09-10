@@ -210,7 +210,7 @@ footer {
 
 /* ===== Kolom Pencarian ===== */
 .search-box {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .search-box input {
@@ -219,6 +219,14 @@ footer {
     padding: 0.5rem 0.75rem;
     border: 1px solid #cdd4da;
     border-radius: 4px;
+}
+
+/* ===== Info Counter Tabel (Latihan JS-05) ===== */
+.table-info {
+    font-size: 0.88rem;
+    color: #55677a;
+    margin-bottom: 1rem;
+    font-style: italic;
 }
 
 @media (min-width: 1400px) {
@@ -238,14 +246,20 @@ footer {
     }
 
     header nav {
-        display: none;
+        display: block;
         width: 100%;
         order: 3;
-        margin-top: 1rem;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        margin-top: 0;
+        transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
     }
 
     header nav.nav-open {
-        display: block;
+        max-height: 300px;
+        opacity: 1;
+        margin-top: 1rem;
     }
 
     header nav ul {
@@ -260,30 +274,6 @@ footer {
 
 /* Mobile */
 @media (max-width: 480px) {
-    header {
-        position: relative;
-    }
-
-    .nav-toggle-label {
-        display: block;
-    }
-
-    header nav {
-        display: none;
-        width: 100%;
-        order: 3;
-        margin-top: 1rem;
-    }
-
-    header nav.nav-open {
-        display: block;
-    }
-
-    header nav ul {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
     main section:nth-of-type(2) {
         grid-template-columns: 1fr;
     }
