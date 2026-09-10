@@ -1,45 +1,38 @@
-﻿// Mengambil & menampilkan Daftar Buku secara asinkron dari data/buku.json
-async function muatDaftarBuku() {
-    const tbody = document.querySelector(".table-responsive table tbody");
-    const loading = document.getElementById("loading-indicator");
-    if (!tbody) return;
-
-    loading.style.display = "block";
-    tbody.innerHTML = "";
-
-    try {
-        // simulasi delay jaringan agar loading indicator terlihat
-        await new Promise((resolve) => setTimeout(resolve, 600));
-
-        const res = await fetch("../data/buku.json");
-        if (!res.ok) {
-            throw new Error("Gagal mengambil data (status " + res.status + ")");
-        }
-        const daftarBuku = await res.json();
-
-        daftarBuku.forEach(function (buku) {
+// Mengambil & menampilkan Daftar Buku menggunakan fungsi generik muatDataTabel (Latihan §8.4 No. 2)
+function muatDaftarBuku() {
+    return muatDataTabel({
+        url: "../data/buku.json",
+        tbodySelector: ".table-responsive table tbody",
+        loadingId: "loading-indicator",
+        delay: 800, // Latihan §8.4 No. 5: delay 800ms agar visual loading terasa pas
+        colspan: 6, // 6 kolom (Judul, Pengarang, Tahun, Kategori, Stok, Aksi)
+        renderRow: function (buku) {
             const tr = document.createElement("tr");
+            // Latihan §8.4 No. 3: Menampilkan kolom kategori di baris tabel
             tr.innerHTML =
                 "<td>" + buku.judul + "</td>" +
                 "<td>" + buku.pengarang + "</td>" +
                 "<td>" + buku.tahun + "</td>" +
+                "<td>" + (buku.kategori || "-") + "</td>" +
                 "<td>" + buku.stok + "</td>" +
                 "<td>" +
                 "<button type=\"button\">Edit</button> " +
                 "<button type=\"button\" class=\"btn-hapus\">Hapus</button>" +
                 "</td>";
-            tbody.appendChild(tr);
-        });
-
-        if (typeof updateTableCounter === "function") {
-            updateTableCounter();
+            return tr;
         }
-    } catch (err) {
-        tbody.innerHTML =
-            "<tr><td colspan=\"5\">Gagal memuat data: " + err.message + "</td></tr>";
-    } finally {
-        loading.style.display = "none";
-    }
+    });
 }
 
-document.addEventListener("DOMContentLoaded", muatDaftarBuku);
+document.addEventListener("DOMContentLoaded", function () {
+    // Muat data buku pertama kali
+    muatDaftarBuku();
+
+    // Latihan §8.4 No. 1: Pasang event listener pada tombol "Muat Ulang"
+    const btnReload = document.getElementById("btn-reload");
+    if (btnReload) {
+        btnReload.addEventListener("click", function () {
+            muatDaftarBuku();
+        });
+    }
+});

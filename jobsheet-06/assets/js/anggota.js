@@ -1,22 +1,12 @@
-﻿// Mengambil & menampilkan Daftar Anggota secara asinkron dari data/anggota.json
-async function muatDaftarAnggota() {
-    const tbody = document.querySelector(".table-responsive table tbody");
-    const loading = document.getElementById("loading-indicator");
-    if (!tbody) return;
-
-    loading.style.display = "block";
-    tbody.innerHTML = "";
-
-    try {
-        await new Promise((resolve) => setTimeout(resolve, 600));
-
-        const res = await fetch("../data/anggota.json");
-        if (!res.ok) {
-            throw new Error("Gagal mengambil data (status " + res.status + ")");
-        }
-        const daftarAnggota = await res.json();
-
-        daftarAnggota.forEach(function (anggota) {
+// Mengambil & menampilkan Daftar Anggota menggunakan fungsi generik muatDataTabel (Latihan §8.4 No. 2)
+function muatDaftarAnggota() {
+    return muatDataTabel({
+        url: "../data/anggota.json",
+        tbodySelector: ".table-responsive table tbody",
+        loadingId: "loading-indicator",
+        delay: 800, // Latihan §8.4 No. 5: delay 800ms agar visual loading terasa pas
+        colspan: 5, // 5 kolom (No. Anggota, Nama, Alamat, No. HP, Aksi)
+        renderRow: function (anggota) {
             const tr = document.createElement("tr");
             tr.innerHTML =
                 "<td>" + anggota.no_anggota + "</td>" +
@@ -27,18 +17,17 @@ async function muatDaftarAnggota() {
                 "<button type=\"button\">Edit</button> " +
                 "<button type=\"button\" class=\"btn-hapus\">Hapus</button>" +
                 "</td>";
-            tbody.appendChild(tr);
-        });
-
-        if (typeof updateTableCounter === "function") {
-            updateTableCounter();
+            return tr;
         }
-    } catch (err) {
-        tbody.innerHTML =
-            "<tr><td colspan=\"5\">Gagal memuat data: " + err.message + "</td></tr>";
-    } finally {
-        loading.style.display = "none";
-    }
+    });
 }
 
-document.addEventListener("DOMContentLoaded", muatDaftarAnggota);
+document.addEventListener("DOMContentLoaded", function () {
+    muatDaftarAnggota();
+    const btnReload = document.getElementById("btn-reload");
+    if (btnReload) {
+        btnReload.addEventListener("click", function () {
+            muatDaftarAnggota();
+        });
+    }
+});

@@ -36,13 +36,50 @@ function updateTableCounter() {
     }
 }
 
-// Memakai event delegation di document karena baris tabel sekarang
-// dirender dinamis via fetch (lihat buku.js/anggota.js) sehingga
-// tombol .btn-hapus belum tentu ada saat DOMContentLoaded.
+async function muatDataTabel({ url, tbodySelector, loadingId, delay = 800, renderRow, colspan = 5 }) {
+    const tbody = document.querySelector(tbodySelector);
+    const loading = document.getElementById(loadingId);
+    if (!tbody) return;
+
+    if (loading) loading.style.display = "block";
+    tbody.innerHTML = "";
+
+    try {
+        
+        if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error("Gagal mengambil data (status " + res.status + ")");
+        }
+        const dataList = await res.json();
+
+        dataList.forEach(function (item) {
+            const tr = renderRow(item);
+            tbody.appendChild(tr);
+        });
+
+        if (typeof updateTableCounter === "function") {
+            updateTableCounter();
+        }
+    } catch (err) {
+        tbody.innerHTML =
+            "<tr><td colspan=\"" + colspan + "\">Gagal memuat data: " + err.message + "</td></tr>";
+    } finally {
+        if (loading) loading.style.display = "none";
+    }
+}
+
 function initHapusConfirm() {
     document.addEventListener("click", function (e) {
+        console.log("[Event Delegation] Click target pada dokumen:", e.target);
+
         const btn = e.target.closest(".btn-hapus");
         if (!btn) return;
+
+        console.log("[Event Delegation] Target cocok dengan tombol .btn-hapus:", btn);
 
         const row = btn.closest("tr");
         const nama = row ? row.querySelector("td")?.textContent.trim() : "data ini";
@@ -65,8 +102,6 @@ function initTableFilter() {
         const keyword = input.value.toLowerCase().trim();
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach(function (row) {
-            // Latihan 3 (§8.4): Batasi pencarian hanya ke satu kolom spesifik
-            // Halaman buku: kolom 1 (Judul), Halaman anggota: kolom 2 (Nama)
             const targetCell = isAnggota
                 ? row.querySelectorAll("td")[1]
                 : row.querySelector("td");

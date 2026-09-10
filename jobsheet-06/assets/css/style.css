@@ -229,6 +229,51 @@ footer {
     font-style: italic;
 }
 
+/* ===== Toolbar Tabel & Tombol Reload (Latihan JS-06) ===== */
+.toolbar-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.toolbar-table .search-box {
+    margin-bottom: 0;
+}
+
+.btn-secondary {
+    background-color: #55677a;
+    color: #fff;
+    border: none;
+    padding: 0.55rem 0.95rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #3e4c5b;
+}
+
+/* ===== Loading Indicator Halus (Latihan JS-06) ===== */
+.loading-indicator {
+    display: none;
+    font-size: 0.95rem;
+    color: #320042;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    animation: pulseLoading 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseLoading {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
 @media (min-width: 1400px) {
     main {
         max-width: 90%;
