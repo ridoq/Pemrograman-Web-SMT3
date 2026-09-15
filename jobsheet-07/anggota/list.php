@@ -13,9 +13,15 @@ $daftarAnggota = $_SESSION['anggota'] ?? [];
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
             <?php endif; ?>
 
-            <div class="search-box">
-                <label for="search-input">Cari Nama Anggota</label>
-                <input type="text" id="search-input" placeholder="Ketik nama anggota...">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div class="search-box" style="margin-bottom: 0;">
+                    <label for="search-input">Cari Nama Anggota</label>
+                    <input type="text" id="search-input" placeholder="Ketik nama anggota...">
+                </div>
+                <div>
+                    <a href="../debug_session.php" style="display: inline-block; padding: 0.45rem 0.85rem; background-color: #320042; color: #fff; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 500;">Debug Sesi</a>
+                    <a href="../reset_session.php" onclick="return confirm('Apakah Anda yakin ingin mengosongkan seluruh data sesi?');" style="display: inline-block; padding: 0.45rem 0.85rem; background-color: #d9534f; color: #fff; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 500;">Reset Sesi</a>
+                </div>
             </div>
 
             <div class="table-responsive">
