@@ -140,7 +140,7 @@ td button:last-of-type {
 }
 
 form {
-    height: 70vh;
+    /* height: 70vh; */
     overflow-y: auto;
 }
 
