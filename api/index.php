@@ -1,0 +1,60 @@
+<?php
+// Vercel Serverless PHP Router untuk SIMPUS-Mini
+$savePath = sys_get_temp_dir() . '/sessions';
+if (!file_exists($savePath)) {
+    @mkdir($savePath, 0777, true);
+}
+ini_set('session.save_path', $savePath);
+
+// Ambil path request
+$uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$uri = rawurldecode($uri);
+
+// Default ke index.php jika root
+if ($uri === '/' || $uri === '') {
+    $uri = '/index.php';
+}
+
+// Lokasi target di folder jobsheet-13
+$baseDir = realpath(__DIR__ . '/../jobsheet-13');
+$target = realpath($baseDir . $uri);
+
+// Layani static asset jika terpanggil lewat router
+if ($target && str_starts_with($target, $baseDir) && is_file($target)) {
+    $ext = strtolower(pathinfo($target, PATHINFO_EXTENSION));
+    $mimes = [
+        'css' => 'text/css',
+        'js'  => 'application/javascript',
+        'png' => 'image/png',
+        'jpg' => 'image/jpeg',
+        'svg' => 'image/svg+xml',
+        'ico' => 'image/x-icon',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2',
+    ];
+    if (isset($mimes[$ext])) {
+        header("Content-Type: {$mimes[$ext]}");
+        readfile($target);
+        exit;
+    }
+
+    if ($ext === 'php') {
+        $_SERVER['SCRIPT_FILENAME'] = $target;
+        chdir(dirname($target));
+        require $target;
+        exit;
+    }
+}
+
+// Fallback: Jika diakses tanpa ekstensi .php (misal /auth/login)
+$targetPhp = realpath($baseDir . $uri . '.php');
+if ($targetPhp && str_starts_with($targetPhp, $baseDir) && is_file($targetPhp)) {
+    $_SERVER['SCRIPT_FILENAME'] = $targetPhp;
+    chdir(dirname($targetPhp));
+    require $targetPhp;
+    exit;
+}
+
+// 404 Not Found
+http_response_code(404);
+echo "404 Not Found: Halaman " . htmlspecialchars($uri) . " tidak ditemukan.";
