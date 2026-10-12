@@ -10,27 +10,34 @@ ini_set('session.save_path', $savePath);
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $uri = rawurldecode($uri);
 
+// Normalisasi jika user mengakses dengan awalan /jobsheet-13
+if (str_starts_with($uri, '/jobsheet-13/')) {
+    $uri = substr($uri, strlen('/jobsheet-13'));
+} elseif ($uri === '/jobsheet-13') {
+    $uri = '/index.php';
+}
+
 // Default ke index.php jika root
 if ($uri === '/' || $uri === '') {
     $uri = '/index.php';
 }
 
 // Lokasi target di folder jobsheet-13
-$baseDir = realpath(__DIR__ . '/../jobsheet-13');
-$target = realpath($baseDir . $uri);
+$baseDir = realpath(__DIR__ . '/../jobsheet-13') ?: (__DIR__ . '/../jobsheet-13');
+$target = realpath($baseDir . $uri) ?: ($baseDir . $uri);
 
 // Layani static asset jika terpanggil lewat router
-if ($target && str_starts_with($target, $baseDir) && is_file($target)) {
+if (file_exists($target) && is_file($target)) {
     $ext = strtolower(pathinfo($target, PATHINFO_EXTENSION));
     $mimes = [
-        'css' => 'text/css',
-        'js'  => 'application/javascript',
-        'png' => 'image/png',
-        'jpg' => 'image/jpeg',
-        'svg' => 'image/svg+xml',
-        'ico' => 'image/x-icon',
+        'css'  => 'text/css',
+        'js'   => 'application/javascript',
+        'png'  => 'image/png',
+        'jpg'  => 'image/jpeg',
+        'svg'  => 'image/svg+xml',
+        'ico'  => 'image/x-icon',
         'woff' => 'font/woff',
-        'woff2' => 'font/woff2',
+        'woff2'=> 'font/woff2',
     ];
     if (isset($mimes[$ext])) {
         header("Content-Type: {$mimes[$ext]}");
@@ -47,8 +54,8 @@ if ($target && str_starts_with($target, $baseDir) && is_file($target)) {
 }
 
 // Fallback: Jika diakses tanpa ekstensi .php (misal /auth/login)
-$targetPhp = realpath($baseDir . $uri . '.php');
-if ($targetPhp && str_starts_with($targetPhp, $baseDir) && is_file($targetPhp)) {
+$targetPhp = realpath($baseDir . $uri . '.php') ?: ($baseDir . $uri . '.php');
+if (file_exists($targetPhp) && is_file($targetPhp)) {
     $_SERVER['SCRIPT_FILENAME'] = $targetPhp;
     chdir(dirname($targetPhp));
     require $targetPhp;
